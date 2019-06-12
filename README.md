@@ -183,7 +183,7 @@ But we want best-of-both-worlds and don’t take on the subsistutability respons
 Solution: IDEs will allow you to convert inheritance to composition easily
 
 Sometimes, not violating LSP means violating DRY and OCP:
-
+```java
 class A{
   public void f1(){}
 }
@@ -195,7 +195,7 @@ public void f1(){
    _a.f1();
   }
 }
-
+```
 We see composition above but look at that DRY violation, we need to duplicate the public void f1.
 And if A::f1() changes name or parameters, we need to change B::f1() too, violating OCP
 (Thoughts: I’d argue that changing that public method breaches an interface contract anyways)
@@ -204,7 +204,7 @@ And if A::f1() changes name or parameters, we need to change B::f1() too, violat
 Violating LSP here would cause other more numerous DRY and OCP violations in other parts of the code.
 
 Groovy, like Go, works around this by having class B expose methods of class A as if they are it’s own, even though class A is a member of class B.
-
+```java
 class A{
    void public f1(){}
 }
@@ -219,7 +219,7 @@ class B{
 B b = new B();
 b.f2(); //this is defined in class B
 b.f1(); //this is defined in class A, but it's accessible through class B transparently 
-
+```
 In this example, the bytecode/binary will contain some duplication but the source code is free from it and changing the source will also transparently and painlessly change the bytecode/binary. No conflicts will arise anymore.
 
 (Thought: this example of composition with class B exposing class A’s methods as if they are its own still has caveats. It tightly couples class A and B. Clients of class B are actually direct clients of class A, unbeknownst to them. So if class A changes its method names, clients of class B will be directly impacted, for example. If class B has a redundant method, it could shield its clients for class A changes.)
